@@ -1,0 +1,18 @@
+Bootstrap: docker
+From: ubuntu:jammy
+Stage: spython-base
+
+%post
+
+DEBIAN_FRONTEND=noninteractive
+MAMBA_DOCKERFILE_ACTIVATE=1
+
+
+apt-get update && apt-get install -y --no-install-recommends \
+git g++ google-perftools cmake autoconf libtool liblzma-dev zlib1g-dev libbz2-dev libcurl3-dev libssl-dev \
+ca-certificates cpp make libltdl-dev wget unzip  libgomp1
+
+%runscript
+exec "/bin/bash" "$@"
+#%startscript
+#exec /usr/local/bin/_entrypoint.sh  "$@"
