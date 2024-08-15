@@ -1,0 +1,39 @@
+Bootstrap: docker
+From: ubuntu:jammy
+Stage: spython-base
+
+%post
+
+DEBIAN_FRONTEND=noninteractive
+MAMBA_DOCKERFILE_ACTIVATE=1
+
+
+#micromamba install  --quiet -y -n base -c bioconda -c conda-forge  snakemake vcf2maf ensembl-vep  &&    micromamba clean --all --yes
+
+
+apt-get update && apt-get install -y --no-install-recommends \
+git g++ google-perftools cmake autoconf libtool liblzma-dev zlib1g-dev libbz2-dev libcurl3-dev libssl-dev \
+ca-certificates cpp make libltdl-dev wget unzip  libgomp1
+
+git clone --recursive https://github.com/wwylab/MuSE /MuSE_src/
+cd /MuSE_src/ && ./install_muse.sh
+
+
+
+mkdir -p /MuSE/bin
+cp /MuSE_src/MuSE /MuSE/bin
+cd /
+rm -rf /MuSE_src 
+
+PATH=$PATH:/MuSE/bin
+
+apt-get purge -y git g++ google-perftools cmake autoconf libtool liblzma-dev \
+    zlib1g-dev libbz2-dev libcurl3-dev libssl-dev \
+    cpp make libltdl-dev wget unzip &&
+apt-get autoremove --purge -y && apt-get autoclean -y &&
+    apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+%runscript
+exec "/MuSE/bin/MuSE" "$@"
+#%startscript
+#exec /usr/local/bin/_entrypoint.sh  "$@"
