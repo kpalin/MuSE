@@ -7,10 +7,6 @@ Stage: spython-base
 DEBIAN_FRONTEND=noninteractive
 MAMBA_DOCKERFILE_ACTIVATE=1
 
-
-#micromamba install  --quiet -y -n base -c bioconda -c conda-forge  snakemake vcf2maf ensembl-vep  &&    micromamba clean --all --yes
-
-
 apt-get update && apt-get install -y --no-install-recommends \
 git g++ google-perftools cmake autoconf libtool liblzma-dev zlib1g-dev libbz2-dev libcurl3-dev libssl-dev \
 ca-certificates cpp make libltdl-dev wget unzip  libgomp1
